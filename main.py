@@ -1,7 +1,7 @@
 import torch
 import torchvision
-from Torch_CV_Utils.utils import data_handling, train, test, gradcam, helpers, augmentation
-from Torch_CV_Utils.models import resnet
+from core_utils.utils import data_handling, train, test, gradcam, helpers, augmentation
+from core_utils.models import resnet
 from torch.optim.lr_scheduler import StepLR, ExponentialLR, OneCycleLR, LambdaLR, CosineAnnealingLR, ReduceLROnPlateau
 import torch.nn.functional as F
 import torch.optim as optim
@@ -22,7 +22,7 @@ def create_dataloaders(mean, std, cuda, config, augment_func = "albumentation_au
     return trainloader, testloader
 
 
-def trigger_training(model, device, trainloader, testloader, config, optimizer_name = "Adam", scheduler_name = "OneCycle", criterion_name = "CrossEntropyLoss", lambda_l1 = 0, epochs = 100):
+def start_training(model, device, trainloader, testloader, config, optimizer_name = "Adam", scheduler_name = "OneCycle", criterion_name = "CrossEntropyLoss", lambda_l1 = 0, epochs = 100):
     
     train_acc, train_losses, test_acc, test_losses, lrs = [], [], [], [], []
     
