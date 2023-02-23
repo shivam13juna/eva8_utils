@@ -22,3 +22,58 @@ def albumentation_augmentation(mean, std, config):
                                 ToTensorV2()])
     
     return lambda img:train_transforms(image=np.array(img))["image"],lambda img:test_transforms(image=np.array(img))["image"]
+
+
+# Uses this transform -RandomCrop 32, 32 (after padding of 4) >> FlipLR >> Followed by CutOut(8, 8)
+def s8_albumentation_augmentation(mean, std, config):
+
+	# pad by 4 albumentations transform
+	train_transform = A.Compose([
+              A.PadIfNeeded(min_height = 40, min_width = 40, always_apply=True), 
+								A.RandomCrop(height = 32, width = 32, p = 1),
+            
+								A.HorizontalFlip(p = 0.2),
+								A.Cutout(num_holes=1, max_h_size=8, max_w_size=8,  fill_value=tuple([x * 255.0 for x in mean])),
+                                A.Normalize(mean = mean, std = std, always_apply = True),
+                                ToTensorV2()
+								])
+								
+	test_transforms = A.Compose([A.Normalize(mean = mean, std = std, always_apply = True),
+								ToTensorV2()])
+
+
+	return lambda img:train_transform(image=np.array(img))["image"],lambda img:test_transforms(image=np.array(img))["image"]
+
+											
+
+# ## Train and Teset Phase transformations - Assignment 9
+def albumentation_augmentation_S9(mean, std, config):
+    
+    train_transforms = A.Compose([A.PadIfNeeded(min_height = config['padHeightWidth'], min_width = config['padHeightWidth'], always_apply = True),
+                                A.RandomCrop(width = config['randomCropSize'], height = config['randomCropSize'], p = config['randomCropProb']),
+                                A.HorizontalFlip(p = config['horizontalFlipProb']),
+                                A.Cutout(num_holes=config['maxHoles'], max_h_size=config['maxHeight'], max_w_size=config['maxWidth'],  fill_value=tuple([x * 255.0 for x in mean])),
+                                A.Normalize(mean = mean, std = std, always_apply = True),
+                                ToTensorV2()
+                              ])
+
+    test_transforms = A.Compose([A.Normalize(mean = mean, std = std, always_apply = True),
+                                ToTensorV2()])
+    
+    return lambda img:train_transforms(image=np.array(img))["image"],lambda img:test_transforms(image=np.array(img))["image"]
+# standard_lr : 0.01
+# momentum_val : 0.9
+# oneCycle_pct_start : 0.2
+# L2_penalty : 0
+# horizontalFlipProb : 0.2
+# shiftScaleRotateProb : 0.25
+# maxHoles : 1 
+# minHoles : 1
+# maxHeight : 8 
+# maxWidth : 8
+# minHeight : 8
+# minWidth : 8
+# coarseDropoutProb : 0.5
+# padHeightWidth : 40
+# randomCropSize : 32
+# randomCropProb : 1	
