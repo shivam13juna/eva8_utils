@@ -46,21 +46,6 @@ def s8_albumentation_augmentation(mean, std, config):
 
 											
 
-# ## Train and Teset Phase transformations - Assignment 9
-def albumentation_augmentation_S9(mean, std, config):
-    
-    train_transforms = A.Compose([A.PadIfNeeded(min_height = config['padHeightWidth'], min_width = config['padHeightWidth'], always_apply = True),
-                                A.RandomCrop(width = config['randomCropSize'], height = config['randomCropSize'], p = config['randomCropProb']),
-                                A.HorizontalFlip(p = config['horizontalFlipProb']),
-                                A.Cutout(num_holes=config['maxHoles'], max_h_size=config['maxHeight'], max_w_size=config['maxWidth'],  fill_value=tuple([x * 255.0 for x in mean])),
-                                A.Normalize(mean = mean, std = std, always_apply = True),
-                                ToTensorV2()
-                              ])
-
-    test_transforms = A.Compose([A.Normalize(mean = mean, std = std, always_apply = True),
-                                ToTensorV2()])
-    
-    return lambda img:train_transforms(image=np.array(img))["image"],lambda img:test_transforms(image=np.array(img))["image"]
 # standard_lr : 0.01
 # momentum_val : 0.9
 # oneCycle_pct_start : 0.2

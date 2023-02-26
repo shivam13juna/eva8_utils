@@ -7,9 +7,19 @@ class Custom_ResNet(nn.Module):
         super(Custom_ResNet, self).__init__()
         
         self.prep_layer = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(64),
+            nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
+            # Here 
+            
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+
+            nn.Conv2d(in_channels=32, out_channels=48, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(48),
+            nn.ReLU(),
+
         )
         
         self.layer1 = self.X_seq(64, 128, 3)
